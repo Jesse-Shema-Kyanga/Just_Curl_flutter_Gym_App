@@ -64,4 +64,16 @@ class UserPreferences {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('emergencyContacts');
   }
+
+  // Save selected language
+  static Future<void> saveLanguage(String languageCode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', languageCode);
+  }
+
+  // Load selected language
+  static Future<String> loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('language') ?? 'en'; // Default to English if not set
+  }
 }

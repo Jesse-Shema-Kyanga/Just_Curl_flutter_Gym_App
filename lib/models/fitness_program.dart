@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 enum ProgramType {
   cardio,
@@ -24,16 +25,16 @@ class FitnessProgram {
 final List<FitnessProgram> fitnessPrograms = [
   FitnessProgram(
     image: const AssetImage('assets/running.jpg'),
-    name: 'Cardio',
-    cals: '220kkal',
-    time: '20min',
+    name: 'cardio'.tr(), // Localized key for "Cardio"
+    cals: 'cals'.tr(namedArgs: {'cals': '220kkal'}), // Localized dynamic key for calories
+    time: 'time'.tr(namedArgs: {'time': '20min'}), // Localized dynamic key for time
     type: ProgramType.cardio,
   ),
   FitnessProgram(
     image: const AssetImage('assets/weights.jpg'),
-    name: 'Barbel Arm Lift',
-    cals: '220kkal',
-    time: '20min',
+    name: 'barbelArmLift'.tr(), // Localized key for "Barbel Arm Lift"
+    cals: 'cals'.tr(namedArgs: {'cals': '220kkal'}), // Localized dynamic key for calories
+    time: 'time'.tr(namedArgs: {'time': '20min'}), // Localized dynamic key for time
     type: ProgramType.lift,
   ),
 ];

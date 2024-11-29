@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;
@@ -23,8 +24,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           size: 16,
         ),
       ),
-      title: const Text(
-        'Activity',
+      title:  Text(
+        'Activity'.tr(),
         style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,

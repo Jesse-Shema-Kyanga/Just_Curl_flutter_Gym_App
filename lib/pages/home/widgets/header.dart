@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../../user_preferences.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 
 class AppHeader extends StatefulWidget {
   const AppHeader({Key? key}) : super(key: key);
@@ -37,16 +37,16 @@ class _AppHeaderState extends State<AppHeader> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select Profile Picture'),
-          content: const Text('Choose a source:'),
+          title: Text('selectProfilePicture'.tr()), // .tr() to use translation key
+          content: Text('chooseSource'.tr()),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, ImageSource.camera), // Select camera
-              child: const Text('Camera'),
+              child: Text('camera'.tr()), // .tr() for translation
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, ImageSource.gallery), // Select gallery
-              child: const Text('Gallery'),
+              child: Text('gallery'.tr()), // .tr() for translation
             ),
           ],
         );
@@ -112,7 +112,7 @@ class _AppHeaderState extends State<AppHeader> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hello',
+                  'hello'.tr(), // .tr() for translation
                   style: TextStyle(
                     color: isDarkMode ? Colors.white : Colors.black, // Dynamic text color
                     fontWeight: FontWeight.w300,
@@ -120,7 +120,7 @@ class _AppHeaderState extends State<AppHeader> {
                   ),
                 ),
                 Text(
-                  'Gym goer',
+                  'gymGoer'.tr(), // .tr() for translation
                   style: TextStyle(
                     color: isDarkMode ? Colors.white : Colors.black, // Dynamic text color
                     fontWeight: FontWeight.bold,
@@ -162,11 +162,3 @@ class HeaderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true; // Ensure it repaints on theme change
 }
-
-
-
-
-
-
-
-

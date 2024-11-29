@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class WeightGoalPage extends StatefulWidget {
   const WeightGoalPage({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _WeightGoalPageState extends State<WeightGoalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Set Weight Goal'),
+        title: const Text('setWeightGoal').tr(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -22,9 +23,9 @@ class _WeightGoalPageState extends State<WeightGoalPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Set Your Weight Goal:',
+              'setYourWeightGoal',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            ).tr(),
             const SizedBox(height: 24),
             Slider(
               value: _goalWeight,
@@ -39,13 +40,13 @@ class _WeightGoalPageState extends State<WeightGoalPage> {
               },
             ),
             Text(
-              'Goal Weight: ${_goalWeight.round()} kg',
+              'goalWeight'.tr(namedArgs: {'weight': _goalWeight.round().toString()}),
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: _saveWeightGoal,
-              child: const Text('Save and Continue'),
+              child: const Text('saveAndContinue').tr(),
             ),
           ],
         ),
@@ -59,7 +60,7 @@ class _WeightGoalPageState extends State<WeightGoalPage> {
 
     // Show confirmation (optional)
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Weight goal set to ${_goalWeight.round()} kg')),
+      SnackBar(content: Text('weightGoalSet'.tr(namedArgs: {'weight': _goalWeight.round().toString()}))),
     );
 
     // Navigate to the next page (goal selection or home page)

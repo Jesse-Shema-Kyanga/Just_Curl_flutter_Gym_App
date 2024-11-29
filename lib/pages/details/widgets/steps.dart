@@ -1,5 +1,6 @@
 import 'package:fitness_tracker/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Steps extends StatelessWidget {
   const Steps({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ class Steps extends StatelessWidget {
               fontWeight: FontWeight.w900,
             ),
           ),
-          const Text(
-            'Total Steps',
+           Text(
+            'totalSteps'.tr(),
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,

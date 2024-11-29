@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GoalSelectionPage extends StatefulWidget {
   const GoalSelectionPage({Key? key}) : super(key: key);
@@ -8,19 +9,19 @@ class GoalSelectionPage extends StatefulWidget {
 }
 
 class _GoalSelectionPageState extends State<GoalSelectionPage> {
-  String _selectedGoal = 'Gain Muscle'; // Default workout goal
+  String _selectedGoal = 'gainMuscle'.tr(); // Default workout goal
 
   final List<String> _goals = [
-    'Gain Muscle',
-    'Lose Fat',
-    'Improve Cardio',
+    'gainMuscle'.tr(),
+    'loseFat'.tr(),
+    'improveCardio'.tr(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Workout Goal'),
+        title: const Text('selectWorkoutGoal').tr(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,10 +30,10 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Select Your Workout Goal:',
+              'selectYourWorkoutGoal',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
-            ),
+            ).tr(),
             const SizedBox(height: 24),
             ..._goals.map((goal) => RadioListTile<String>(
               title: Text(goal),
@@ -47,7 +48,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: _saveWorkoutGoal,
-              child: const Text('Finish'),
+              child: const Text('finish').tr(),
             ),
           ],
         ),
@@ -61,11 +62,10 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
 
     // Show confirmation (optional)
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Workout goal set to $_selectedGoal')),
+      SnackBar(content: Text('workoutGoalSet'.tr(namedArgs: {'goal': _selectedGoal}))),
     );
 
     // Navigate to the home page after finishing goal selection
     Navigator.pushReplacementNamed(context, '/home');
   }
 }
-

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:easy_localization/easy_localization.dart'; // Ensure this package is imported
 import '../../../user_preferences.dart'; // Ensure to import UserPreferences
 
 class EmergencyContactsSection extends StatefulWidget {
@@ -56,9 +57,9 @@ class _EmergencyContactsSectionState extends State<EmergencyContactsSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Emergency Contacts',
-              style: TextStyle(
+            Text(
+              'emergencyContacts'.tr(),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -83,7 +84,7 @@ class _EmergencyContactsSectionState extends State<EmergencyContactsSection> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _pickEmergencyContact,
-              child: const Text('Add Emergency Contact'),
+              child: Text('addEmergencyContact'.tr()),
             ),
           ],
         ),

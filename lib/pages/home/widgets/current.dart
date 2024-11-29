@@ -1,5 +1,6 @@
-import 'package:fitness_tracker/models/fitness_program.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness_tracker/models/fitness_program.dart';
 
 class CurrentPrograms extends StatefulWidget {
   const CurrentPrograms({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _CurrentProgramsState extends State<CurrentPrograms> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Current Programs',
+                'currentPrograms'.tr(),
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -117,10 +118,10 @@ class ProgramItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(program.name),
+              Text(program.name.tr()), // Localized program name
               Row(
                 children: [
-                  Text(program.cals),
+                  Text('cals'.tr(namedArgs: {'cals': program.cals})), // Calories
                   const SizedBox(width: 15),
                   Icon(
                     Icons.timer,
@@ -128,7 +129,7 @@ class ProgramItem extends StatelessWidget {
                     color: active ? Colors.white : Colors.black,
                   ),
                   const SizedBox(width: 5),
-                  Text(program.time),
+                  Text('time'.tr(namedArgs: {'time': program.time})), // Time
                 ],
               )
             ],

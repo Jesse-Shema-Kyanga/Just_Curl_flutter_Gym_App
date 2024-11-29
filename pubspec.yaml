@@ -33,10 +33,24 @@ dependencies:
   sqflite: ^2.0.0+4  # Check for the latest version on pub.dev
   path_provider: ^2.0.2  # For getting the correct file paths
   image_picker: ^1.1.2
+  google_sign_in: ^6.2.2
+  sensors_plus: ^6.1.0
+  font_awesome_flutter: ^10.8.0
   shared_preferences: ^2.3.2
   contacts_service: ^0.6.3
   permission_handler: ^11.3.1
   url_launcher: ^6.3.1
+  easy_localization: ^3.0.7
+  location: ^7.0.1
+  flutter_local_notifications: ^18.0.1
+  flutter_compass: ^0.8.1
+
+
+  pedometer: ^4.0.2
+
+
+  flutter_localizations:
+    sdk: flutter
 
 
 
@@ -45,11 +59,14 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  get: ^4.6.6
+  google_maps_flutter: ^2.10.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -63,17 +80,23 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: false
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
+
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/lang/
+    - assets/config.json
     - assets/profile.jpg
     - assets/running.jpg
     - assets/weights.jpg
+    - assets/compass.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -111,3 +134,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

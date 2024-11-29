@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_localization/easy_localization.dart'; // Ensure GetX is imported for lang
 
 class ReachOutSection extends StatelessWidget {
   const ReachOutSection({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class ReachOutSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Having trouble? Reach out to us!',
+            'havingTroubleReachOut'.tr(), // Replace with translation key
             style: TextStyle(
               fontSize: 16, // Smaller font size
               color: isDarkMode ? Colors.white : Colors.black, // Dynamic text color
@@ -49,5 +50,3 @@ class ReachOutSection extends StatelessWidget {
     );
   }
 }
-
-

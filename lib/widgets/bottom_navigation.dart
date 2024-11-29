@@ -22,18 +22,17 @@ class BottomNavigation extends StatelessWidget {
           children: [
             const Icon(
               Icons.add_chart,
-              color: Colors.transparent, // Make it transparent or use SizedBox if not needed
+              color: Colors.transparent, // Placeholder
             ),
             const Icon(
               Icons.search,
-              color: Colors.transparent, // Make it transparent or use SizedBox if not needed
+              color: Colors.transparent, // Placeholder
             ),
             Transform.translate(
               offset: const Offset(0, -15),
               child: GestureDetector(
                 onTap: () {
-                  // Navigate to home page
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.of(context).pushReplacementNamed('/home'); // Home navigation
                 },
                 child: Container(
                   padding: const EdgeInsets.all(13),
@@ -63,18 +62,34 @@ class BottomNavigation extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // Navigate to details page
-                Navigator.pushNamed(context, '/details');
+                Navigator.pushNamed(context, '/details'); // Details navigation
               },
               child: Icon(
                 Icons.date_range,
-                color: iconColor, // Set a visible color
+                color: iconColor, // Icon color
               ),
             ),
             GestureDetector(
               onTap: () {
-                // Navigate to the settings page
-                Navigator.of(context).pushNamed('/settings');
+                Navigator.pushNamed(context, '/map'); // Map navigation
+              },
+              child: Icon(
+                Icons.map,
+                color: iconColor, // Icon color
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/running'); // Running page navigation
+              },
+              child: Icon(
+                Icons.directions_run, // Running icon
+                color: iconColor, // Icon color
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/settings'); // Settings navigation
               },
               child: const Icon(Icons.settings),
             ),
@@ -84,4 +99,3 @@ class BottomNavigation extends StatelessWidget {
     );
   }
 }
-

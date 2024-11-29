@@ -1,6 +1,6 @@
-import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:fitness_tracker/helpers/database_helper.dart';
 
 class Graph extends StatelessWidget {
   const Graph({Key? key}) : super(key: key);
@@ -26,30 +26,41 @@ class GraphArea extends StatefulWidget {
 class _GraphAreaState extends State<GraphArea>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-
-  List<DataPoint> data = [
-    DataPoint(day: 1, steps: Random().nextInt(100)),
-    DataPoint(day: 2, steps: Random().nextInt(100)),
-    DataPoint(day: 3, steps: Random().nextInt(100)),
-    DataPoint(day: 4, steps: Random().nextInt(100)),
-    DataPoint(day: 5, steps: Random().nextInt(100)),
-    DataPoint(day: 6, steps: Random().nextInt(100)),
-    DataPoint(day: 7, steps: Random().nextInt(100)),
-    DataPoint(day: 8, steps: Random().nextInt(100)),
-  ];
+  List<DataPoint> data = [];
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2500));
-    _animationController.forward();
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    );
+    _fetchStepData(); // Fetch data on initialization
   }
 
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchStepData() async {
+    final dbHelper = DatabaseHelper();
+    final db = await dbHelper.database;
+
+    // Example: Assume a table `steps` exists with columns `day` and `step_count`
+    final List<Map<String, dynamic>> results = await db.query('steps');
+    if (results.isNotEmpty) {
+      setState(() {
+        data = results
+            .map((row) => DataPoint(
+          day: row['day'] as int,
+          steps: row['step_count'] as int,
+        ))
+            .toList();
+        _animationController.forward(); // Trigger animation
+      });
+    }
   }
 
   @override
@@ -72,23 +83,24 @@ class GraphPainter extends CustomPainter {
 
   GraphPainter(Animation<double> animation, {required this.data})
       : _size = Tween<double>(begin: 0, end: 1).animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0.0, 0.75,
-                curve: Curves.easeInOutCubicEmphasized),
-          ),
-        ),
+    CurvedAnimation(
+      parent: animation,
+      curve: const Interval(0.0, 0.75,
+          curve: Curves.easeInOutCubicEmphasized),
+    ),
+  ),
         _dotSize = Tween<double>(begin: 0, end: 1).animate(
           CurvedAnimation(
             parent: animation,
-            curve:
-                const Interval(0.75, 1, curve: Curves.easeInOutCubicEmphasized),
+            curve: const Interval(0.75, 1, curve: Curves.easeInOutCubicEmphasized),
           ),
         ),
         super(repaint: animation);
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (data.isEmpty) return; // Prevent drawing if no data available
+
     var xSpacing = size.width / (data.length - 1);
 
     var maxSteps = data

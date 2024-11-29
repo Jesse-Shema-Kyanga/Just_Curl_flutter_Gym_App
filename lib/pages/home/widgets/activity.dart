@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RecentActivities extends StatelessWidget {
   const RecentActivities({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class RecentActivities extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Recent Activity',
+            'recentActivity'.tr(),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -25,7 +26,7 @@ class RecentActivities extends StatelessWidget {
               itemCount: 10,
               itemBuilder: (context, index) => const ActivityItem(),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -36,16 +37,17 @@ class ActivityItem extends StatelessWidget {
   const ActivityItem({Key? key}) : super(key: key);
 
   static const activities = [
-    'Running',
-    'Swimming',
-    'Hiking',
-    'Walking',
-    'Cycling'
+    'running',
+    'swimming',
+    'hiking',
+    'walking',
+    'cycling',
   ];
 
   @override
   Widget build(BuildContext context) {
-    String activity = activities[Random().nextInt(activities.length)];
+    String activityKey = activities[Random().nextInt(activities.length)];
+    String activity = activityKey.tr();
 
     return GestureDetector(
       onTap: () {
@@ -92,16 +94,16 @@ class ActivityItem extends StatelessWidget {
             const Spacer(),
             const Icon(Icons.timer, size: 12),
             const SizedBox(width: 5),
-            const Text(
-              '30min',
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
+            Text(
+              'thirtyMin'.tr(),
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
             ),
             const SizedBox(width: 10),
             const Icon(Icons.wb_sunny_outlined, size: 12),
             const SizedBox(width: 5),
-            const Text(
-              '55kcal',
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
+            Text(
+              'fiftyFiveKcal'.tr(),
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
             ),
             const SizedBox(width: 20),
           ],

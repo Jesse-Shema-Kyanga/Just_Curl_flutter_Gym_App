@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../helpers/database_helper.dart';
 
@@ -27,7 +28,7 @@ class _SignupPageState extends State<SignupPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Create Account',
+                  'createAccount'.tr(),
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -36,13 +37,13 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'name'.tr(), // Replace with the key for "Name"
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
+                      return 'pleaseEnterYourName'.tr(); // Key for "Please enter your name"
                     }
                     return null;
                   },
@@ -50,16 +51,16 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'email'.tr(), // Replace with the key for "Email"
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'pleaseEnterYourEmail'.tr(); // Key for "Please enter your email"
                     }
                     if (!value.contains('@')) {
-                      return 'Please enter a valid email';
+                      return 'invalidEmail'.tr(); // Key for "Please enter a valid email"
                     }
                     return null;
                   },
@@ -67,17 +68,17 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'password'.tr(), // Replace with the key for "Password"
+                    border: const OutlineInputBorder(),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
+                      return 'pleaseEnterYourPassword'.tr(); // Key for "Please enter a password"
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters long';
+                      return 'passwordTooShort'.tr(); // Key for "Password must be at least 6 characters long"
                     }
                     return null;
                   },
@@ -86,14 +87,14 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _submit,
-                  child: const Text('Sign Up'),
+                  child: Text('signUp'.tr()), // Key for "Sign Up"
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
                   },
-                  child: const Text('Already have an account? Log in'),
+                  child: Text('alreadyHaveAccount'.tr()), // Key for "Already have an account? Log in"
                 ),
               ],
             ),
@@ -112,7 +113,7 @@ class _SignupPageState extends State<SignupPage> {
       if (exists) {
         // Show an error message if the user already exists
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User already exists with this email.')),
+          SnackBar(content: Text('userAlreadyExists'.tr())), // Key for "User already exists with this email"
         );
         return;
       }
@@ -131,5 +132,3 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 }
-
-

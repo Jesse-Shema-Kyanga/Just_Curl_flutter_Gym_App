@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../helpers/database_helper.dart'; // Adjust the path as necessary
-import '../../user_preferences.dart'; // Update the path here
- // Import the UserPreferences
+import '../../user_preferences.dart';
+import '../home/home.dart';
+import 'google_signin_api.dart'; // Update the path here
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Log In',
+                  'logIn'.tr(),
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -37,16 +41,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'Email'.tr(),
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Please enter your email'.tr();
                     }
                     if (!value.contains('@')) {
-                      return 'Please enter a valid email';
+                      return 'Please enter a valid email'.tr();
                     }
                     return null;
                   },
@@ -54,14 +58,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'Password'.tr(),
+                    border: const OutlineInputBorder(),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
+                      return 'Please enter a password'.tr();
                     }
                     return null;
                   },
@@ -70,14 +74,28 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _submit,
-                  child: const Text('Log In'),
+                  child: Text('logIn'.tr()),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.google,
+                    color: Colors.red,
+                  ),
+                  label: Text('Sign in with Google'.tr()),
+                  onPressed: _signInWithGoogle,
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/signup');
                   },
-                  child: const Text('Don\'t have an account? Sign up'),
+                  child: Text('dontHaveAccount'.tr()),
                 ),
               ],
             ),
@@ -97,21 +115,37 @@ class _LoginPageState extends State<LoginPage> {
         // Save login status in shared preferences
         await UserPreferences.setLoginStatus(true);
 
-        // Optionally save the user's profile picture path if needed
-        // await UserPreferences.setProfilePicture(user.profilePicturePath);
-
         // Navigate directly to the home page after successful login
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid email or password')),
+          SnackBar(content: Text('invalidCredentials'.tr())),
         );
       }
     }
   }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      final user = await GoogleSignInApi.login(); // Assuming this is your custom API
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign in Failed'.tr())),
+        );
+      } else {
+        // Navigate to the HomePage after successful login
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomePage(), // Pass user if needed
+          ),
+        );
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred during sign in'.tr())),
+      );
+      print('Error during Google sign-in: $error');
+    }
+  }
 }
-
-
-
-

@@ -1,9 +1,11 @@
+import 'package:fitness_tracker/pages/auth/google_signin_api.dart';
 import 'package:fitness_tracker/pages/details/details.dart';
 import 'package:fitness_tracker/pages/home/widgets/activity.dart';
 import 'package:fitness_tracker/pages/home/widgets/current.dart';
 import 'package:fitness_tracker/pages/home/widgets/header.dart';
 import 'package:fitness_tracker/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';// Ensure GetX is imported for lang
 import '../../user_preferences.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,12 +15,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Just Curl'),
+        title: Text('appName'.tr()), // Use the appName key from en.json
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await UserPreferences.clearLoginStatus();
+              await GoogleSignInApi.logout();
               Navigator.pushReplacementNamed(context, '/');
             },
           ),
@@ -37,7 +40,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const DetailsPage()),
                 );
               },
-              child: const Text('View Details'),
+              child: Text('viewDetails'.tr()), // Use the viewDetails key from en.json
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),

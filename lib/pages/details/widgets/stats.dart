@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Stats extends StatelessWidget {
   const Stats({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return  Column(
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: Row(
             children: [
               Text(
-                'Workout Stats',
+                'workout_stats'.tr(), // Localization key
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
-              ),
+              ), // Only static text needs localization
               SizedBox(width: 8),
               Icon(
                 Icons.pie_chart_rounded,
@@ -38,7 +39,7 @@ class Stats extends StatelessWidget {
                 iconColor: Color(0xff535bed),
                 iconBackground: Color(0xffe4e7ff),
                 time: '+5s',
-                label: 'Time',
+                label: 'time1'.tr(), // Localization key
                 value: '30:34',
               ),
               SizedBox(width: 15),
@@ -47,7 +48,7 @@ class Stats extends StatelessWidget {
                 iconColor: Color(0xffe11e6c),
                 iconBackground: Color(0xffffe4fb),
                 time: '+5s',
-                label: 'Heart Rate',
+                label: 'heart_rate'.tr(), // Localization key
                 value: '151bpm',
               ),
               SizedBox(width: 15),
@@ -56,13 +57,13 @@ class Stats extends StatelessWidget {
                 iconColor: Color(0xffd3b50f),
                 iconBackground: Color(0xfffb4be4),
                 time: '+5s',
-                label: 'Energy',
+                label: 'energy'.tr(), // Localization key
                 value: '169kcal',
               ),
               SizedBox(width: 30),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -94,18 +95,19 @@ class InfoStat extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: const Color(0xffe1e1e1),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: const Color(0xffe1e1e1),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            offset: Offset(3, 3),
+            blurRadius: 3,
           ),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(3, 3),
-              blurRadius: 3,
-            ),
-          ]),
+        ],
+      ),
       child: Stack(
         children: [
           StatIcon(
@@ -121,11 +123,11 @@ class InfoStat extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  label,
+                  label.tr(), // Static text needs .tr()
                   style: const TextStyle(fontSize: 10),
                 ),
                 Text(
-                  value,
+                  value, // Dynamic text, no .tr()
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -133,7 +135,7 @@ class InfoStat extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -162,7 +164,7 @@ class Change extends StatelessWidget {
           borderRadius: BorderRadius.circular(500),
         ),
         child: Text(
-          time,
+          time, // Dynamic text, no .tr()
           style: const TextStyle(fontSize: 10, color: Colors.white),
         ),
       ),
