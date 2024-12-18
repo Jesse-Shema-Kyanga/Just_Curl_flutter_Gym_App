@@ -11,71 +11,47 @@ class RunningPage extends StatefulWidget {
 }
 
 class _RunningPageState extends State<RunningPage> {
-  // Compass Variables
-  double heading = 0.0; // Compass heading
-  bool isCompassSupported = true;
-
   // Step Counter Variables
   int stepCount = 0;
   double lastAcceleration = 0.0;
-  double dynamicThreshold = 2.5; // Adaptive threshold
-  double stepLength = 0.762; // Average step length in meters
+  double dynamicThreshold = 1.8; // Optimized threshold
+  double stepLength = 0.65; // Average step length in meters
   double distanceTraveled = 0.0;
-  final List<double> accelerationHistory = [];
+  final List<double> accelerationHistory = List.filled(5, 0.0);
   DateTime lastStepTime = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    _startCompass();
     _startStepCounting();
   }
 
-  // Compass Initialization
-  void _startCompass() {
-    FlutterCompass.events!.listen((event) {
-      if (event.heading == null) {
-        setState(() {
-          isCompassSupported = false;
-        });
-        return;
-      }
-      setState(() {
-        heading = event.heading!;
-      });
-    });
-  }
-
-  // Step Counter Initialization
   void _startStepCounting() {
     accelerometerEvents.listen((AccelerometerEvent event) {
       double currentAcceleration = sqrt(
           event.x * event.x + event.y * event.y + event.z * event.z);
 
-      // Update acceleration history
-      if (accelerationHistory.length >= 10) {
-        accelerationHistory.removeAt(0);
+      // Shift values in acceleration history
+      for (int i = 0; i < accelerationHistory.length - 1; i++) {
+        accelerationHistory[i] = accelerationHistory[i + 1];
       }
-      accelerationHistory.add(currentAcceleration);
+      accelerationHistory[accelerationHistory.length - 1] = currentAcceleration;
 
-      // Calculate smoothed acceleration and adaptive threshold
-      double smoothedAcceleration = accelerationHistory.reduce((a, b) => a + b) / accelerationHistory.length;
-      double adjustedThreshold = dynamicThreshold;
+      double smoothedAcceleration = accelerationHistory.reduce((a, b) => a + b) /
+          accelerationHistory.length;
 
-      // Detect steps based on smoothed acceleration
-      if ((smoothedAcceleration - lastAcceleration).abs() > adjustedThreshold) {
+      if ((currentAcceleration > smoothedAcceleration + dynamicThreshold) &&
+          (currentAcceleration > lastAcceleration)) {
         DateTime now = DateTime.now();
-
-        // Ensure at least 300ms between steps
-        if (now.difference(lastStepTime).inMilliseconds > 300) {
+        if (now.difference(lastStepTime).inMilliseconds > 250) {
           setState(() {
             stepCount++;
-            lastStepTime = now;
             distanceTraveled = stepCount * stepLength;
+            lastStepTime = now;
           });
         }
       }
-      lastAcceleration = smoothedAcceleration;
+      lastAcceleration = currentAcceleration;
     });
   }
 
@@ -86,74 +62,92 @@ class _RunningPageState extends State<RunningPage> {
         title: const Text('Running Tracker'),
         backgroundColor: Colors.blue,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
+      body: Column(
+        children: [
+          Expanded(
+            child:// In the build method, update the StreamBuilder section:
+            StreamBuilder<CompassEvent>(
+              stream: FlutterCompass.events,
+              builder: (context, snapshot) {
+                // First check if device has sensors
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Text(
+                      "Calibrating sensors...",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                }
 
-            // Compass Display
-            Column(
-              children: [
-                const Text(
-                  'Compass',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                isCompassSupported
-                    ? SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Transform.rotate(
-                        angle: heading * pi / 180, // Rotate compass
-                        child: const Icon(
-                          Icons.navigation,
-                          size: 80,
+                double? heading = snapshot.data!.heading;
+
+                if (heading != null) {
+                  return Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Transform.rotate(
+                          angle: (-heading) * (pi / 180),
+                          child: Image.asset(
+                            'assets/compass.jpg',  // Updated asset path
+                            width: 300,
+                            height: 300,
+                          ),
+                        ),
+                        Container(
+                          width: 4,
+                          height: 150,
                           color: Colors.red,
                         ),
-                      ),
-                    ],
+                        Positioned(
+                          bottom: 0,
+                          child: Text(
+                            '${heading.toStringAsFixed(0)}°',
+                            style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Text(
+                      "Move your device in a figure 8 pattern",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                }
+              },
+            )
+
+          ),
+          Card(
+            margin: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Text(
+                    'Activity Tracking',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                )
-                    : const Text(
-                  'Compass not supported on this device',
-                  style: TextStyle(color: Colors.red),
-                ),
-                isCompassSupported
-                    ? Text(
-                  '${heading.toStringAsFixed(2)}°',
-                  style: const TextStyle(fontSize: 20),
-                )
-                    : Container(),
-              ],
+                  const SizedBox(height: 16),
+                  Text(
+                    'Steps: $stepCount',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    'Distance: ${distanceTraveled.toStringAsFixed(2)} m',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
             ),
-
-            const Divider(height: 40),
-
-            // Step Counter Display
-            Column(
-              children: [
-                const Text(
-                  'Steps & Distance',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Steps: $stepCount',
-                  style: const TextStyle(fontSize: 20),
-                ),
-                Text(
-                  'Distance: ${distanceTraveled.toStringAsFixed(2)} m',
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

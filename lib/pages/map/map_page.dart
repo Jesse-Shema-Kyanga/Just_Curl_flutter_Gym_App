@@ -128,21 +128,26 @@ class _MapPageState extends State<MapPage> {
           Marker(
             markerId: MarkerId('user'),
             position: _userLocation!,
-            infoWindow: InfoWindow(
-                title: 'Your Location',
-                snippet:
-                '${_userLocation!.latitude}, ${_userLocation!.longitude}'),
+            infoWindow: InfoWindow(title: 'Your Location'),
           ),
           Marker(
             markerId: MarkerId('gym'),
             position: _gymLocation,
-            infoWindow: InfoWindow(
-                title: 'Gym Location',
-                snippet:
-                '${_gymLocation.latitude}, ${_gymLocation.longitude}'),
+            infoWindow: InfoWindow(title: 'Gym Location'),
+          ),
+        },
+        circles: {
+          Circle(
+            circleId: CircleId('gym_zone'),
+            center: _gymLocation,
+            radius: _radius,
+            fillColor: Colors.blue.withOpacity(0.3),
+            strokeColor: Colors.blue,
+            strokeWidth: 2,
           ),
         },
       ),
     );
   }
+
 }

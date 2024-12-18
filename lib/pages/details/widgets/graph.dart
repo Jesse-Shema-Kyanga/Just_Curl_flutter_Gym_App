@@ -45,23 +45,24 @@ class _GraphAreaState extends State<GraphArea>
   }
 
   Future<void> _fetchStepData() async {
-    final dbHelper = DatabaseHelper();
-    final db = await dbHelper.database;
+    // Mock data for 7 days
+    final mockData = [
+      DataPoint(day: 1, steps: 5000),
+      DataPoint(day: 2, steps: 7500),
+      DataPoint(day: 3, steps: 6200),
+      DataPoint(day: 4, steps: 8800),
+      DataPoint(day: 5, steps: 7300),
+      DataPoint(day: 6, steps: 9100),
+      DataPoint(day: 7, steps: 8400),
+    ];
 
-    // Example: Assume a table `steps` exists with columns `day` and `step_count`
-    final List<Map<String, dynamic>> results = await db.query('steps');
-    if (results.isNotEmpty) {
-      setState(() {
-        data = results
-            .map((row) => DataPoint(
-          day: row['day'] as int,
-          steps: row['step_count'] as int,
-        ))
-            .toList();
-        _animationController.forward(); // Trigger animation
-      });
-    }
+    setState(() {
+      data = mockData;
+      _animationController.forward();
+    });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
