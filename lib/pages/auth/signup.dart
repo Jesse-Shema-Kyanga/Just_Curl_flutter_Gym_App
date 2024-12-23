@@ -1,6 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../helpers/database_helper.dart';
+import '../../user_preferences.dart';
+import '../goal/weight_goal.dart';  // Updated to match your file name
+
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class _SignupPageState extends State<SignupPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'createAccount'.tr(),
+                  'Create Account',
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -37,13 +39,13 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'name'.tr(), // Replace with the key for "Name"
-                    border: const OutlineInputBorder(),
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'pleaseEnterYourName'.tr(); // Key for "Please enter your name"
+                      return 'Please enter your name';
                     }
                     return null;
                   },
@@ -51,16 +53,16 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'email'.tr(), // Replace with the key for "Email"
-                    border: const OutlineInputBorder(),
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'pleaseEnterYourEmail'.tr(); // Key for "Please enter your email"
+                      return 'Please enter your email';
                     }
                     if (!value.contains('@')) {
-                      return 'invalidEmail'.tr(); // Key for "Please enter a valid email"
+                      return 'Please enter a valid email';
                     }
                     return null;
                   },
@@ -68,17 +70,17 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'password'.tr(), // Replace with the key for "Password"
-                    border: const OutlineInputBorder(),
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'pleaseEnterYourPassword'.tr(); // Key for "Please enter a password"
+                      return 'Please enter a password';
                     }
                     if (value.length < 6) {
-                      return 'passwordTooShort'.tr(); // Key for "Password must be at least 6 characters long"
+                      return 'Password must be at least 6 characters long';
                     }
                     return null;
                   },
@@ -87,14 +89,18 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _submit,
-                  child: Text('signUp'.tr()), // Key for "Sign Up"
+                  child: const Text('Sign Up'),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/',
+                          (route) => false,
+                    );
                   },
-                  child: Text('alreadyHaveAccount'.tr()), // Key for "Already have an account? Log in"
+                  child: const Text('Already have an account? Log in'),
                 ),
               ],
             ),
@@ -108,27 +114,34 @@ class _SignupPageState extends State<SignupPage> {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
 
-      // Check if user already exists
       bool exists = await DatabaseHelper().userExists(_email);
       if (exists) {
-        // Show an error message if the user already exists
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('userAlreadyExists'.tr())), // Key for "User already exists with this email"
+          const SnackBar(content: Text('User already exists')),
         );
         return;
       }
 
-      // Create a new user map
       Map<String, dynamic> user = {
         'email': _email,
         'password': _password,
+        'name': _name,
+        'weight_goal': 0.0,
+        'current_weight': 0.0,
+        'workout_goal': '',
       };
 
-      // Insert user into the database
       await DatabaseHelper().insertUser(user);
+      await UserPreferences.setLoginStatus(true);
+      await UserPreferences.setEmail(_email);
 
-      // Navigate to the weight goal page
-      Navigator.pushReplacementNamed(context, '/weight_goal');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WeightGoalPage(userEmail: _email),  // Go to weight goal first
+        ),
+      );
+
     }
   }
 }

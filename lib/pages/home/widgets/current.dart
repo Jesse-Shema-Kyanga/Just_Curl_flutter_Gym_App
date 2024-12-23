@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness_tracker/models/fitness_program.dart';
+import 'package:fitness_tracker/pages/exercise/exercise_logging_page.dart';
+import 'package:fitness_tracker/pages/running/running_page.dart';
 
 class CurrentPrograms extends StatefulWidget {
-  const CurrentPrograms({Key? key}) : super(key: key);
+  final String? workoutGoal;
+  const CurrentPrograms({Key? key, this.workoutGoal}) : super(key: key);
 
   @override
   State<CurrentPrograms> createState() => _CurrentProgramsState();
@@ -12,11 +15,49 @@ class CurrentPrograms extends StatefulWidget {
 class _CurrentProgramsState extends State<CurrentPrograms> {
   ProgramType active = fitnessPrograms[0].type;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.workoutGoal != null) {
+      setState(() {
+        active = _getProgramTypeFromGoal(widget.workoutGoal!);
+      });
+    }
+  }
+
+  ProgramType _getProgramTypeFromGoal(String goal) {
+    switch (goal) {
+      case 'gainMuscle':
+        return ProgramType.lift;
+      case 'loseFat':
+        return ProgramType.cardio;
+      case 'improveCardio':
+        return ProgramType.cardio;
+      default:
+        return fitnessPrograms[0].type;
+    }
+  }
+
+
   void _changeProgram(ProgramType newType) {
     setState(() {
       active = newType;
     });
+
+    // Navigate based on program type
+    if (newType == ProgramType.cardio) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const RunningPage()),
+      );
+    } else if (newType == ProgramType.lift) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ExerciseLoggingPage()),
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +84,7 @@ class _CurrentProgramsState extends State<CurrentPrograms> {
           ),
         ),
         SizedBox(
-          height: 120, // Restricts height to avoid overflow
+          height: 120,
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             scrollDirection: Axis.horizontal,
@@ -118,10 +159,10 @@ class ProgramItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(program.name.tr()), // Localized program name
+              Text(program.name.tr()),
               Row(
                 children: [
-                  Text('cals'.tr(namedArgs: {'cals': program.cals})), // Calories
+                  Text('cals'.tr(namedArgs: {'cals': program.cals})),
                   const SizedBox(width: 15),
                   Icon(
                     Icons.timer,
@@ -129,7 +170,7 @@ class ProgramItem extends StatelessWidget {
                     color: active ? Colors.white : Colors.black,
                   ),
                   const SizedBox(width: 5),
-                  Text('time'.tr(namedArgs: {'time': program.time})), // Time
+                  Text('time'.tr(namedArgs: {'time': program.time})),
                 ],
               )
             ],

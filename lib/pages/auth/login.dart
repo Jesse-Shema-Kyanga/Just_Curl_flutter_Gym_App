@@ -33,7 +33,11 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Text(
                   'logIn'.tr(),
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
                   ),
@@ -112,13 +116,15 @@ class _LoginPageState extends State<LoginPage> {
       // Check user credentials
       final user = await DatabaseHelper().getUser(_email, _password);
       if (user != null) {
-        // Save login status in shared preferences
-        await UserPreferences.setLoginStatus(true);
+        // Save login status and email in shared preferences
+        await Future.wait([
+          UserPreferences.setLoginStatus(true),
+          UserPreferences.setEmail(_email),
+        ]);
 
-        // Navigate directly to the home page after successful login
+        // Navigate to home page
         Navigator.pushReplacementNamed(context, '/home');
       } else {
-        // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('invalidCredentials'.tr())),
         );
@@ -128,17 +134,33 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _signInWithGoogle() async {
     try {
-      final user = await GoogleSignInApi.login(); // Assuming this is your custom API
-      if (user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign in Failed'.tr())),
-        );
-      } else {
-        // Navigate to the HomePage after successful login
+      final user = await GoogleSignInApi.login();
+      if (user != null) {
+        // Save Google user data
+        await Future.wait([
+          UserPreferences.setLoginStatus(true),
+          UserPreferences.setEmail(user.email),
+        ]);
+
+        // Check if user exists in database
+        final dbUser = await DatabaseHelper().getUserProfile(user.email);
+        if (dbUser == null) {
+          // Create new user profile if doesn't exist
+          await DatabaseHelper().insertUserProfile({
+            'email': user.email,
+            'name': user.displayName ?? '',
+            'workout_goal': '', // Default empty goal
+          });
+        }
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const HomePage(), // Pass user if needed
+            builder: (context) => const HomePage(),
           ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign in Failed'.tr())),
         );
       }
     } catch (error) {

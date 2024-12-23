@@ -1,3 +1,4 @@
+import 'package:fitness_tracker/pages/exercise/exercise_logging_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,10 +9,8 @@ import 'package:fitness_tracker/pages/details/details.dart';
 import 'package:fitness_tracker/pages/auth/login.dart';
 import 'package:fitness_tracker/pages/auth/signup.dart';
 import 'package:fitness_tracker/pages/home/home.dart';
-import 'package:fitness_tracker/pages/goal/goal_selection.dart';
-import 'package:fitness_tracker/pages/goal/weight_goal.dart';
 import 'package:fitness_tracker/settings/settings.dart';
-import 'package:fitness_tracker/pages/map/map_page.dart';
+
 import 'package:fitness_tracker/pages/running/running_page.dart'; // Import the Running Page
 
 void main() async {
@@ -46,14 +45,14 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
-        '/weight_goal': (context) => const WeightGoalPage(),
-        '/goal_selection': (context) => const GoalSelectionPage(),
         '/home': (context) => const HomePage(),
         '/settings': (context) => const SettingsPage(),
         '/details': (context) => const DetailsPage(),
-        '/map': (context) => const MapPage(),
-        '/running': (context) => const RunningPage(), // New route for Running Page
+        '/running': (context) => const RunningPage(),
+        '/exercise': (context) => const ExerciseLoggingPage(),
+
       },
+      // Remove '/weight_goal' from static routes since it needs parameters
       initialRoute: '/',
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

@@ -76,4 +76,17 @@ class UserPreferences {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('language') ?? 'en'; // Default to English if not set
   }
+
+  static Future<void> setEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
+  }
+
+
+  // In user_preferences.dart
+  static Future<String?> getEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email');
+  }
+
 }

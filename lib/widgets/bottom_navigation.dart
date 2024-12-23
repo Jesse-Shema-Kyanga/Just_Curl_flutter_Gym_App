@@ -1,3 +1,4 @@
+// bottom_navigation.dart
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -6,10 +7,10 @@ class BottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color backgroundColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.grey[850]! // Dark mode background color
-        : const Color(0xfff8f8f8); // Light mode background color
+        ? Colors.grey[850]!
+        : const Color(0xfff8f8f8);
 
-    final Color iconColor = Theme.of(context).iconTheme.color ?? Colors.black; // Get the icon color from the theme
+    final Color iconColor = Theme.of(context).iconTheme.color ?? Colors.black;
 
     return Container(
       width: double.infinity,
@@ -20,19 +21,29 @@ class BottomNavigation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Icon(
-              Icons.add_chart,
-              color: Colors.transparent, // Placeholder
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/details');
+              },
+              child: Icon(
+                Icons.date_range,
+                color: iconColor,
+              ),
             ),
-            const Icon(
-              Icons.search,
-              color: Colors.transparent, // Placeholder
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/exercise');
+              },
+              child: Icon(
+                Icons.fitness_center,
+                color: iconColor,
+              ),
             ),
             Transform.translate(
               offset: const Offset(0, -15),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/home'); // Home navigation
+                  Navigator.of(context).pushReplacementNamed('/home');
                 },
                 child: Container(
                   padding: const EdgeInsets.all(13),
@@ -62,36 +73,21 @@ class BottomNavigation extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/details'); // Details navigation
+                Navigator.of(context).pushNamed('/running');
               },
               child: Icon(
-                Icons.date_range,
-                color: iconColor, // Icon color
+                Icons.directions_run,
+                color: iconColor,
               ),
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/map'); // Map navigation
+                Navigator.of(context).pushNamed('/settings');
               },
               child: Icon(
-                Icons.map,
-                color: iconColor, // Icon color
+                Icons.settings,
+                color: iconColor,
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed('/running'); // Running page navigation
-              },
-              child: Icon(
-                Icons.directions_run, // Running icon
-                color: iconColor, // Icon color
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed('/settings'); // Settings navigation
-              },
-              child: const Icon(Icons.settings),
             ),
           ],
         ),
